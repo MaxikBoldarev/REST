@@ -2,22 +2,28 @@ package ru.netology.rest.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.netology.rest.model.Authorities;
+import ru.netology.rest.user.Users;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class UserRepository {
+
+    private final List<Users> listUsers = new ArrayList<>(Stream.of(
+                    new Users("admin", "1111"),
+                    new Users("manager", "2222"),
+                    new Users("user", "3333"))
+            .collect(Collectors.toList()));
+
     public List<Authorities> getUserAuthorities(String user, String password) {
-        List<Authorities> authorities = new ArrayList<>();
-        if (user.equals("admin") && password.equals("1111")) {
-            Collections.addAll(authorities, Authorities.READ, Authorities.WRITE, Authorities.DELETE);
-        } else if (user.equals("manager") && password.equals("2222")) {
-            Collections.addAll(authorities, Authorities.READ, Authorities.WRITE);
-        } else if (user.equals("user") && password.equals("3333")) {
-            Collections.addAll(authorities, Authorities.READ);
+        for (Users listUser : listUsers) {
+            if (listUser.getUser().equals(user) & listUser.getPassword().equals(password)) {
+                return List.of(Authorities.READ);
+            }
         }
-        return authorities;
+        return List.of();
     }
 }
