@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  REST_App:
+    image: 'myapp:1.0'
+    ports:
+      - '9999:9999'
+    build:
+      context: ./
